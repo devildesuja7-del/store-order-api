@@ -1,14 +1,10 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, Field
 
-
-# Order item stored as a standard dataclass.
-# Type hints look correct, but nothing checks them at runtime.
-@dataclass
-class OrderItem:
-    product: str
-    quantity: int
-    unit_price: float
-
+class OrderItem(BaseModel):
+    product: str = Field(min_length=1)
+    quantity: int = Field(gt=0)
+    unit_price: float = Field(gt=0)
+    
     @property
     def total(self):
-        return self.quantity * self.unit_price
+        return self.quantity*self.unit_price

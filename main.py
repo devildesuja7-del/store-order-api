@@ -1,4 +1,4 @@
-from dataclasses import asdict
+
 
 from fastapi import FastAPI
 
@@ -10,11 +10,10 @@ orders: list[OrderItem] = []
 
 
 @app.post("/orders", status_code=201)
-def create_order(data: dict):
+def create_order(item:OrderItem):
     # Raw JSON is passed straight into the dataclass
-    item = OrderItem(**data)
     orders.append(item)
-    return {**asdict(item), "total": item.total}
+    return {**item.model_dump(), "total": item.total}
 
 
 @app.get("/orders/summary")
